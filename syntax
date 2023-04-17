@@ -1,0 +1,45 @@
+import pandas as pd
+import matplotlib.pyplot as plt
+
+import pandas as pd 
+import statistics
+
+pd.options.display.max_rows = 9999
+df = pd.read_csv('lifeexpectancy.csv', header=1, index_col=None, names = ['Entity', 'Code','Year', 'Life expectancy - Sex: female - Age: at birth - Variant: estimates', 'Life expectancy - Sex: male - Age: at birth - Variant: estimates','Population - Sex: all - Age: all - Variant: estimates','Continent'] )
+
+print(df.columns)
+print(df.head())
+print(df.describe())
+
+
+from scipy.stats import ttest_ind
+from scipy.stats import ttest_1samp
+# extract the column of interest
+life_expectancy_female = df['Life expectancy - Sex: female - Age: at birth - Variant: estimates'].dropna()
+life_expectancy_male = df['Life expectancy - Sex: male - Age: at birth - Variant: estimates'].dropna()
+# perform a two-sample t-test to compare the means of the two columns
+t_statistic, p_value = ttest_ind(life_expectancy_female, life_expectancy_male)
+# print the t-statistic and p-value
+print("t-statistic:", t_statistic)
+print("p-value:", p_value)
+
+
+
+
+df = pd.read_csv('lifeexpectancy.csv', header=1, index_col=None, names = ['Entity', 'Code','Year', 'Life expectancy - Sex: female - Age: at birth - Variant: estimates', 'Life expectancy - Sex: male - Age: at birth - Variant: estimates','Population - Sex: all - Age: all - Variant: estimates','Continent'] )
+
+df = df[['Year', 'Life expectancy - Sex: female - Age: at birth - Variant: estimates', 'Life expectancy - Sex: male - Age: at birth - Variant: estimates']]
+
+
+df.dropna(inplace=True)
+
+
+plt.scatter(df['Year'], df['Life expectancy - Sex: female - Age: at birth - Variant: estimates'], label='Female', s=10)
+plt.scatter(df['Year'], df['Life expectancy - Sex: male - Age: at birth - Variant: estimates'], label='Male', s =5)
+
+
+plt.xlabel('Year')
+plt.ylabel('Life Expectancy (years)')
+plt.legend()
+
+plt.show()
